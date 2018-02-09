@@ -1,0 +1,8 @@
+{
+  "name": "fiveWords",
+  "app_id": "2c1abc57",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}

@@ -11,5 +11,13 @@
 
 
 <ion-content padding>
+  <ion-item>
+    <ion-label>Your Language</ion-label>
+    <ion-select [(ngModel)]="rootLanguage">
+      <ion-option value="ru">Russain</ion-option>
+      <ion-option value="eng">English</ion-option>
+    </ion-select>
+  </ion-item>
 
+  <button block ion-button (click)="onSave()">Save</button>
 </ion-content>

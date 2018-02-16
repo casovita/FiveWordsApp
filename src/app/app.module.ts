@@ -12,6 +12,8 @@ import {SettingsPage} from '../pages/settings/settings';
 import {WordsMatchingGamePage} from '../pages/words-matching-game/words-matching-game';
 import {OneOfFiveGamePage} from '../pages/one-of-five-game/one-of-five-game';
 import {PlayTabsPage} from '../pages/play-tabs/play-tabs';
+import {StoreModule} from '@ngrx/store';
+import {reducers} from './store/app.reducers';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import {PlayTabsPage} from '../pages/play-tabs/play-tabs';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    StoreModule.forRoot(reducers),
   ],
   bootstrap: [IonicApp],
   entryComponents: [

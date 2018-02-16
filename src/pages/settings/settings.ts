@@ -4,6 +4,8 @@ import {Store} from '@ngrx/store';
 
 import * as fromApp from '../../app/store/app.reducers';
 import * as GameActions from '../../app/game/store/game-actions';
+import {GameTopic, IGameSettings} from '../../app/game/store/game-reducers';
+
 @IonicPage()
 @Component({
   selector: 'page-settings',
@@ -11,6 +13,9 @@ import * as GameActions from '../../app/game/store/game-actions';
 })
 export class SettingsPage {
   rootLanguage: string;
+  targetLanguage: string;
+  topic: GameTopic;
+  topicsEnum = GameTopic;
 
   constructor(private  store: Store<fromApp.AppState>) {
   }
@@ -18,12 +23,19 @@ export class SettingsPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad SettingsPage');
     this.store.select('GameState').subscribe(data => {
-      this.rootLanguage = data.RootLanguage;
+      this.rootLanguage = data.GameSettings.RootLanguage;
+      this.targetLanguage = data.GameSettings.TargetLanguage;
+      this.topic = data.GameSettings.Topic;
     })
   }
 
   onSave() {
-    this.store.dispatch(new GameActions.SetRootLanguage(this.rootLanguage));
+    const gameSettings: IGameSettings = {
+      RootLanguage: this.rootLanguage,
+      TargetLanguage: this.targetLanguage,
+      Topic: this.topic
+    }
+    this.store.dispatch(new GameActions.SetGameSettings(gameSettings));
   }
 
 }

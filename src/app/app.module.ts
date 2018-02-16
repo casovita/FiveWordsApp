@@ -14,6 +14,7 @@ import {OneOfFiveGamePage} from '../pages/one-of-five-game/one-of-five-game';
 import {PlayTabsPage} from '../pages/play-tabs/play-tabs';
 import {StoreModule} from '@ngrx/store';
 import {reducers} from './store/app.reducers';
+import {EnumPipe} from './pipes/enum.pipe';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import {reducers} from './store/app.reducers';
     RulesPage,
     SettingsPage,
     WordsMatchingGamePage,
-    OneOfFiveGamePage
+    OneOfFiveGamePage,
+    EnumPipe
   ],
   imports: [
     BrowserModule,

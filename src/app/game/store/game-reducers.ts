@@ -9,28 +9,36 @@ export enum GameTopic {
   Random, Home, Art, Weather, Business, Clothing, Buildings, Sport, Furniture, Kitchen, Vegetables
 }
 
-export interface State {
+export interface IGameSettings {
   RootLanguage: string;
   TargetLanguage: string;
   Topic: GameTopic;
+
+}
+
+export interface State {
+  GameSettings: IGameSettings
   GameType: GameType;
 }
 
-const initialState: State = {
-  RootLanguage: 'ru',
-  TargetLanguage: 'eng',
-  GameType: GameType.WordsMatching,
-  Topic:GameTopic.Random
-}
+export const initialState: State = {
+  GameSettings: {
+    Topic: GameTopic.Random,
+    RootLanguage: 'ru',
+    TargetLanguage: 'eng',
+  },
+  GameType: GameType.WordsMatching
 
-export function gameReducer(state:State = initialState,action:GameActions.GameActions) {
-switch (action.type){
-  case GameActions.SET_ROOT_LANGUAGE:
-    return{
-      ...state,
-      RootLanguage: action.payload
-    };
-  default:
-    return state;
-}
+};
+
+export function gameReducer(state: State = initialState, action: GameActions.GameActions) {
+  switch (action.type) {
+    case GameActions.SET_GAME_SETTINGS:
+      return {
+        ...state,
+        GameSettings: action.payload
+      };
+    default:
+      return state;
+  }
 }

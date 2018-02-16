@@ -1,13 +1,20 @@
 import {Action} from '@ngrx/store';
+import {GameType, IGameSettings} from './game-reducers';
 
-export const SET_ROOT_LANGUAGE = 'SET_ROOT_LANGUAGE';
+export const SET_GAME_SETTINGS = 'SET_GAME_SETTINGS';
+export const SET_GAME_TYPE = 'SET_GAME_TYPE';
 
-export class SetRootLanguage implements Action {
-  readonly type = SET_ROOT_LANGUAGE;
+export class SetGameSettings implements Action {
+  readonly type = SET_GAME_SETTINGS;
 
-  constructor(public payload: string) {
+  constructor(public payload: IGameSettings) {
   }
 }
 
+export class SetGameType implements Action {
+  readonly type = SET_GAME_TYPE;
 
-export type GameActions = SetRootLanguage;
+  constructor(public payload: GameType) {
+  }
+}
+export type GameActions = SetGameSettings | SetGameType;

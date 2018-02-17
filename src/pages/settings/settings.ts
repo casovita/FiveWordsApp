@@ -4,7 +4,9 @@ import {Store} from '@ngrx/store';
 
 import * as fromApp from '../../app/store/app.reducers';
 import * as GameActions from '../../app/game/store/game-actions';
-import {GameTopic, IGameSettings} from '../../app/game/store/game-reducers';
+import {IGameSettings} from '../../app/game/store/game-reducers';
+import {Language} from '../../app/game/models/language.enum';
+import {GameTopic} from '../../app/game/models/game-topic.enum';
 
 @IonicPage()
 @Component({
@@ -12,10 +14,11 @@ import {GameTopic, IGameSettings} from '../../app/game/store/game-reducers';
   templateUrl: 'settings.html',
 })
 export class SettingsPage {
-  rootLanguage: string;
-  targetLanguage: string;
+  rootLanguage: Language;
+  targetLanguage: Language;
   topic: GameTopic;
   topicsEnum = GameTopic;
+  languagesEnum = Language;
 
   constructor(private  store: Store<fromApp.AppState>) {
   }
@@ -34,7 +37,7 @@ export class SettingsPage {
       RootLanguage: this.rootLanguage,
       TargetLanguage: this.targetLanguage,
       Topic: this.topic
-    }
+    };
     this.store.dispatch(new GameActions.SetGameSettings(gameSettings));
   }
 

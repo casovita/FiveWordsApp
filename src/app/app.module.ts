@@ -1,10 +1,10 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { StatusBar } from '@ionic-native/status-bar';
+import {BrowserModule} from '@angular/platform-browser';
+import {ErrorHandler, NgModule} from '@angular/core';
+import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
+import {SplashScreen} from '@ionic-native/splash-screen';
+import {StatusBar} from '@ionic-native/status-bar';
 
-import { MyApp } from './app.component';
+import {MyApp} from './app.component';
 import {StatusPage} from '../pages/status/status';
 import {InfoPage} from '../pages/info/info';
 import {RulesPage} from '../pages/rules/rules';
@@ -15,6 +15,12 @@ import {PlayTabsPage} from '../pages/play-tabs/play-tabs';
 import {StoreModule} from '@ngrx/store';
 import {reducers} from './store/app.reducers';
 import {EnumPipe} from './pipes/enum.pipe';
+import {EffectsModule} from '@ngrx/effects';
+import {GameEffects} from './game/store/game.effects';
+import {HttpClientModule} from '@angular/common/http';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import {GameService} from './services/game.service';
+import {CapitalizePipe} from './pipes/capitalize.pipe';
 
 @NgModule({
   declarations: [
@@ -26,12 +32,16 @@ import {EnumPipe} from './pipes/enum.pipe';
     SettingsPage,
     WordsMatchingGamePage,
     OneOfFiveGamePage,
-    EnumPipe
+    EnumPipe,
+    CapitalizePipe
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp),
     StoreModule.forRoot(reducers),
+    EffectsModule.forRoot([GameEffects]),
+    StoreDevtoolsModule.instrument()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -47,7 +57,9 @@ import {EnumPipe} from './pipes/enum.pipe';
   providers: [
     StatusBar,
     SplashScreen,
+    GameService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
-export class AppModule {}
+export class AppModule {
+}

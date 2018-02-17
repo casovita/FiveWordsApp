@@ -1,8 +1,11 @@
 import {Action} from '@ngrx/store';
-import {GameType, IGameSettings} from './game-reducers';
+import {GameLapse, IGameSettings} from './game-reducers';
+import {GameType} from '../models/game-type.enum';
 
 export const SET_GAME_SETTINGS = 'SET_GAME_SETTINGS';
 export const SET_GAME_TYPE = 'SET_GAME_TYPE';
+export const GET_GAME_ROUND_OBJ = 'GET_GAME_ROUND_OBJ';
+export const SET_GAME_ROUND_OBJ = 'SET_GAME_ROUND_OBJ';
 
 export class SetGameSettings implements Action {
   readonly type = SET_GAME_SETTINGS;
@@ -17,4 +20,16 @@ export class SetGameType implements Action {
   constructor(public payload: GameType) {
   }
 }
-export type GameActions = SetGameSettings | SetGameType;
+
+export class GetGameRoundObj implements Action {
+  readonly type = GET_GAME_ROUND_OBJ;
+}
+
+export class SetGameRoundObj implements Action {
+  readonly type = SET_GAME_ROUND_OBJ;
+
+  constructor(public payload: Array<GameLapse>) {
+  }
+}
+
+export type GameActions = SetGameSettings | SetGameType | GetGameRoundObj | SetGameRoundObj;

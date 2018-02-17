@@ -1,21 +1,23 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {Component, OnInit} from '@angular/core';
+import {IonicPage} from 'ionic-angular';
 
-/**
- * Generated class for the OneOfFiveGamePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import * as GameActions from '../../app/game/store/game-actions';
+import {GameType} from '../../app/game/models/game-type.enum';
+import {Store} from '@ngrx/store';
+import * as fromApp from '../../app/store/app.reducers';
 
 @IonicPage()
 @Component({
   selector: 'page-one-of-five-game',
   templateUrl: 'one-of-five-game.html',
 })
-export class OneOfFiveGamePage {
+export class OneOfFiveGamePage implements OnInit {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(private store: Store<fromApp.AppState>) {
+  }
+
+  ngOnInit(): void {
+    this.store.dispatch(new GameActions.SetGameType(GameType.OneOfFive))
   }
 
   ionViewDidLoad() {

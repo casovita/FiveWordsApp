@@ -14,21 +14,21 @@
   <ion-item>
     <ion-label>Your Language</ion-label>
     <ion-select [(ngModel)]="rootLanguage">
-      <ion-option value="ru">Russain</ion-option>
-      <ion-option value="eng">English</ion-option>
+      <ion-option *ngFor="let language of languagesEnum | enum" [value]="language.key">{{language.value | capitalize}}
+      </ion-option>
     </ion-select>
   </ion-item>
   <ion-item>
     <ion-label>Target Language</ion-label>
     <ion-select [(ngModel)]="targetLanguage">
-      <ion-option value="ru">Russain</ion-option>
-      <ion-option value="eng">English</ion-option>
+      <ion-option *ngFor="let language of languagesEnum | enum" [value]="language.key">{{language.value | capitalize}}
+      </ion-option>
     </ion-select>
   </ion-item>
   <ion-item>
     <ion-label>Topic</ion-label>
     <ion-select [(ngModel)]="topic">
-      <ion-option *ngFor="let topic of topicsEnum | enum" [value]="topic.key" >{{topic.value}}</ion-option>
+      <ion-option *ngFor="let topic of topicsEnum | enum" [value]="topic.key">{{topic.value | capitalize}}</ion-option>
     </ion-select>
   </ion-item>
   <button block ion-button (click)="onSave()">Save</button>

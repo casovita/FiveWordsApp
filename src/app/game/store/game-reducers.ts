@@ -1,34 +1,31 @@
 import * as GameActions from './game-actions';
-
-export enum GameType {
-  WordsMatching,
-  OneOfFive
-}
-
-export enum GameTopic {
-  Random, Home, Art, Weather, Business, Clothing, Buildings, Sport, Furniture, Kitchen, Vegetables
-}
+import {Language} from '../models/language.enum';
+import {GameType} from '../models/game-type.enum';
+import {GameTopic} from '../models/game-topic.enum';
 
 export interface IGameSettings {
-  RootLanguage: string;
-  TargetLanguage: string;
+  RootLanguage: Language;
+  TargetLanguage: Language;
   Topic: GameTopic;
 
 }
 
+export type GameLapse = [string, string]
+
 export interface State {
   GameSettings: IGameSettings
   GameType: GameType;
+  GameRound?: Array<GameLapse>;
 }
 
 export const initialState: State = {
   GameSettings: {
-    Topic: GameTopic.Random,
-    RootLanguage: 'ru',
-    TargetLanguage: 'eng',
+    Topic: GameTopic.random,
+    RootLanguage: Language.ru,
+    TargetLanguage: Language.en,
   },
-  GameType: GameType.WordsMatching
-
+  GameType: GameType.WordsMatching,
+  GameRound: []
 };
 
 export function gameReducer(state: State = initialState, action: GameActions.GameActions) {
@@ -37,6 +34,16 @@ export function gameReducer(state: State = initialState, action: GameActions.Gam
       return {
         ...state,
         GameSettings: action.payload
+      };
+    case GameActions.SET_GAME_TYPE:
+      return {
+        ...state,
+        GameType: action.payload
+      };
+    case GameActions.SET_GAME_ROUND_OBJ:
+      return {
+        ...state,
+        GameRound: action.payload
       };
     default:
       return state;

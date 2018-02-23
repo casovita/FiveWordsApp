@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {IGameSettings} from '../game/store/game-reducers';
+import {IGameSettings} from '../store/game/game-reducers';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import {Language} from '../game/models/language.enum';
-import {GameTopic} from '../game/models/game-topic.enum';
+import {Language} from '../store/game/models/language.enum';
+import {GameTopic} from '../store/game/models/game-topic.enum';
 
 @Injectable()
 export class GameService {

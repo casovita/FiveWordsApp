@@ -3,10 +3,10 @@ import {IonicPage} from 'ionic-angular';
 import {Store} from '@ngrx/store';
 
 import * as fromApp from '../../app/store/app.reducers';
-import * as GameActions from '../../app/game/store/game-actions';
-import {IGameSettings} from '../../app/game/store/game-reducers';
-import {Language} from '../../app/game/models/language.enum';
-import {GameTopic} from '../../app/game/models/game-topic.enum';
+import * as GameActions from '../../app/store/game/game-actions';
+import {IGameSettings} from '../../app/store/game/game-reducers';
+import {Language} from '../../app/store/game/models/language.enum';
+import {GameTopic} from '../../app/store/game/models/game-topic.enum';
 
 @IonicPage()
 @Component({

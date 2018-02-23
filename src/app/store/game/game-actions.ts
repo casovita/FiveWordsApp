@@ -1,11 +1,13 @@
 import {Action} from '@ngrx/store';
-import {GameLapse, IGameSettings} from './game-reducers';
-import {GameType} from '../models/game-type.enum';
+import {IGameSettings} from './game-reducers';
+import {GameType} from './models/game-type.enum';
+import {Answer} from '../../models/answer';
 
 export const SET_GAME_SETTINGS = 'SET_GAME_SETTINGS';
 export const SET_GAME_TYPE = 'SET_GAME_TYPE';
 export const GET_GAME_ROUND_OBJ = 'GET_GAME_ROUND_OBJ';
 export const SET_GAME_ROUND_OBJ = 'SET_GAME_ROUND_OBJ';
+export const CHECK_ANSWER = 'CHECK_ANSWER';
 
 export class SetGameSettings implements Action {
   readonly type = SET_GAME_SETTINGS;
@@ -28,8 +30,20 @@ export class GetGameRoundObj implements Action {
 export class SetGameRoundObj implements Action {
   readonly type = SET_GAME_ROUND_OBJ;
 
-  constructor(public payload: Array<GameLapse>) {
+  constructor(public payload: Array<Answer>) {
   }
 }
 
-export type GameActions = SetGameSettings | SetGameType | GetGameRoundObj | SetGameRoundObj;
+export class CheckAnswer implements Action {
+  readonly type = CHECK_ANSWER;
+
+  constructor(public payload: { root: string, target: string }) {
+  }
+}
+
+export type GameActions =
+  SetGameSettings |
+  SetGameType |
+  GetGameRoundObj |
+  SetGameRoundObj |
+  CheckAnswer;

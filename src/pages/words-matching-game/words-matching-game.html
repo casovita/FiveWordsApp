@@ -12,18 +12,30 @@
 </ion-header>
 
 
-
 <ion-content padding>
-<ion-grid>
-  <ion-row>
-    <ion-col>
-      <button block ion-button>left</button>
-    </ion-col>
-    <ion-col>
-      <button block
-              ion-button>right</button>
-    </ion-col>
-  </ion-row>
-</ion-grid>
-{{(roundObj$ | async) | json}}
+ <scoreboard></scoreboard>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6>
+        <ion-row style="min-height: 50px" *ngFor="let record of rootArray">
+        <button block
+                [color]="record.isActive == true ? 'dark': 'primary'"
+                [hidden]="record.isVisible == false"
+
+                (click)="onRootSelected(record)" ion-button>{{record.value}}</button>
+        </ion-row>
+      </ion-col>
+
+      <ion-col col-6>
+        <ion-row style="min-height: 50px" *ngFor="let record of targetArray">
+          <button block [color]="record.isActive == true ? 'dark': 'primary'"
+                  [hidden]="record.isVisible == false"
+
+                  (click)="onTargetSelected(record)" ion-button>{{record.value}}</button>
+        </ion-row>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

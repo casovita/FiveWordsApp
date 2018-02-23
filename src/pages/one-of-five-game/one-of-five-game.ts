@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {IonicPage} from 'ionic-angular';
 
-import * as GameActions from '../../app/game/store/game-actions';
-import {GameType} from '../../app/game/models/game-type.enum';
+import * as GameActions from '../../app/store/game/game-actions';
+import {GameType} from '../../app/store/game/models/game-type.enum';
 import {Store} from '@ngrx/store';
 import * as fromApp from '../../app/store/app.reducers';
 

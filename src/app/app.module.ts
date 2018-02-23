@@ -16,11 +16,12 @@ import {StoreModule} from '@ngrx/store';
 import {reducers} from './store/app.reducers';
 import {EnumPipe} from './pipes/enum.pipe';
 import {EffectsModule} from '@ngrx/effects';
-import {GameEffects} from './game/store/game.effects';
+import {GameEffects} from './store/game/game.effects';
 import {HttpClientModule} from '@angular/common/http';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {GameService} from './services/game.service';
 import {CapitalizePipe} from './pipes/capitalize.pipe';
+import {ComponentsModule} from '../components/components.module';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import {CapitalizePipe} from './pipes/capitalize.pipe';
   imports: [
     BrowserModule,
     HttpClientModule,
+    ComponentsModule,
     IonicModule.forRoot(MyApp),
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([GameEffects]),

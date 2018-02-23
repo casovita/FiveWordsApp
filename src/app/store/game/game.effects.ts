@@ -7,10 +7,10 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/withLatestFrom';
 
 import * as GameActions from './game-actions';
-import * as fromApp from '../../store/app.reducers'
+import * as fromApp from '../app.reducers'
 import {GameService} from '../../services/game.service';
-import {GameLapse} from './game-reducers';
-import {Language} from '../models/language.enum';
+import {Language} from './models/language.enum';
+import {Answer} from '../../models/answer';
 
 @Injectable()
 export class GameEffects {
@@ -29,16 +29,20 @@ export class GameEffects {
     })
     .map((array) => {
       console.log(this.currentState);
-      const tupleArray: Array<GameLapse> = array.map((obj) => {
-        let newTuple: GameLapse = [obj[Language[this.currentState.GameSettings.RootLanguage]],
-          obj[Language[this.currentState.GameSettings.TargetLanguage]]];
+      const tupleArray: Array<Answer> = array.map((obj) => {
+        let newTuple: Answer = new Answer(obj[Language[this.currentState.GameSettings.RootLanguage]],
+          obj[Language[this.currentState.GameSettings.TargetLanguage]], false);
         return newTuple;
       });
-
       return {
         type: GameActions.SET_GAME_ROUND_OBJ,
         payload: tupleArray
       }
     });
 
+
+  // @Effect()
+  // checkAnswer: Observable<Action> = this.actions$.ofType(GameActions.CHECK_ANSWER)
+  //   .withLatestFrom(this.store.select(a=>a.GameState.GameRound))
+  //   .switchMap(([action, state])=>{});
 }

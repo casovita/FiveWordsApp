@@ -1,7 +1,8 @@
 import * as GameActions from './game-actions';
-import {Language} from '../models/language.enum';
-import {GameType} from '../models/game-type.enum';
-import {GameTopic} from '../models/game-topic.enum';
+import {Language} from './models/language.enum';
+import {GameType} from './models/game-type.enum';
+import {GameTopic} from './models/game-topic.enum';
+import {Answer} from '../../models/answer';
 
 export interface IGameSettings {
   RootLanguage: Language;
@@ -10,12 +11,10 @@ export interface IGameSettings {
 
 }
 
-export type GameLapse = [string, string]
-
 export interface State {
   GameSettings: IGameSettings
   GameType: GameType;
-  GameRound?: Array<GameLapse>;
+  GameRound?: Array<Answer>;
 }
 
 export const initialState: State = {

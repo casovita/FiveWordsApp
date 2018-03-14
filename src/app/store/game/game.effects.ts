@@ -7,10 +7,13 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/withLatestFrom';
 
 import * as GameActions from './game-actions';
+import * as UserActions from '../user/user.actions';
 import * as fromApp from '../app.reducers'
 import {GameService} from '../../services/game.service';
 import {Language} from './models/language.enum';
 import {Answer} from '../../models/answer';
+import {IGameSettings} from './game-reducers';
+import {GameType} from './models/game-type.enum';
 
 @Injectable()
 export class GameEffects {
@@ -20,29 +23,124 @@ export class GameEffects {
   }
 
   @Effect()
-  getRound$: Observable<Action> = this.actions$.ofType(GameActions.GET_GAME_ROUND_OBJ)
+  getGameRound$: Observable<Action> = this.actions$.ofType(GameActions.GET_GAME_ROUND_WORD_MATCHING, GameActions.GET_GAME_ROUND_ONE_OF_FIVE)
     .withLatestFrom(this.store.select('GameState'))
     .switchMap(([action, state]) => {
       this.currentState = state;
-      const settings = state.GameSettings;
+      const settings: IGameSettings = state.GameSettings;
       return this.gameService.GetRoundWords(settings);
     })
     .map((array) => {
-      console.log(this.currentState);
-      const tupleArray: Array<Answer> = array.map((obj) => {
-        let newTuple: Answer = new Answer(obj[Language[this.currentState.GameSettings.RootLanguage]],
+      const answersArray: Array<Answer> = array.map((obj) => {
+        return new Answer(obj[Language[this.currentState.GameSettings.RootLanguage]],
           obj[Language[this.currentState.GameSettings.TargetLanguage]], false);
-        return newTuple;
       });
-      return {
-        type: GameActions.SET_GAME_ROUND_OBJ,
-        payload: tupleArray
+
+      if (this.currentState.GameType == GameType.WordsMatching) {
+        return {
+          type: GameActions.SET_GAME_ROUND_WORD_MATCHING,
+          payload: answersArray
+        }
+      } else {
+        return {
+          type: GameActions.SET_GAME_ROUND_ONE_OF_FIVE,
+          payload: answersArray
+        }
       }
     });
 
+  ////////////////////////////////////////////////////////////////////////////
 
-  // @Effect()
-  // checkAnswer: Observable<Action> = this.actions$.ofType(GameActions.CHECK_ANSWER)
-  //   .withLatestFrom(this.store.select(a=>a.GameState.GameRound))
-  //   .switchMap(([action, state])=>{});
+  @Effect()
+  checkAnswer$ = this.actions$.ofType(GameActions.CHECK_ANSWER_WORD_MATCHING, GameActions.CHECK_ANSWER_ONE_OF_FIVE)
+    .withLatestFrom(this.store.select(a => this.currentState = a.GameState))
+    .switchMap(([action, state]) => {
+      let answer: Answer;
+      if (action.type == GameActions.CHECK_ANSWER_WORD_MATCHING) {
+        answer = state.CurrentAnswer.WordMatching
+      } else {
+        answer = state.CurrentAnswer.OneOfFive
+      }
+
+      const gameType: GameType = state.GameType;
+      switch (gameType) {
+        case GameType.WordsMatching:
+          if (answer.isResolved) {
+            const isLastHand = state.GameRound.WordMatching.filter(a => a.isResolved == false).length == 0;
+            if (isLastHand) {
+              return [{
+                type: UserActions.UPDATE_USER_POINTS,
+                payload: 2
+              }, {
+                type: GameActions.SET_WM_ANSWER_TO_NULL
+              }, {
+                type: GameActions.GET_GAME_ROUND_WORD_MATCHING
+              }];
+            } else {
+              return [{
+                type: UserActions.UPDATE_USER_POINTS,
+                payload: 2
+              }, {
+                type: GameActions.SET_WM_ANSWER_TO_NULL
+              }];
+            }
+          } else {
+            if (state.GameType == GameType.WordsMatching) {
+              return [{
+                type: UserActions.UPDATE_USER_POINTS,
+                payload: -2
+              }, {
+                type: GameActions.SET_WM_ANSWER_TO_NULL
+              }]
+            } else {
+              return [{
+                type: UserActions.UPDATE_USER_POINTS,
+                payload: -2
+              }]
+            }
+          }
+        case GameType.OneOfFive:
+          if (answer.isResolved) {
+            return [{
+              type: GameActions.SET_OOF_ANSWER_TO_NULL
+            }, {
+              type: GameActions.GET_GAME_ROUND_ONE_OF_FIVE
+            }, {
+              type: UserActions.UPDATE_USER_POINTS,
+              payload: 2
+            }]
+          } else {
+            return [{
+              type: GameActions.SET_OOF_ANSWER_TO_NULL
+            }, {
+              type: UserActions.UPDATE_USER_POINTS,
+              payload: -2
+            }]
+          }
+      }
+    });
+
+  @Effect()
+  setGameType = this.actions$.ofType(GameActions.SET_GAME_TYPE)
+    .mergeMap((action: GameActions.SetGameType) => {
+      let gameType: GameType = action.payload;
+      switch (gameType) {
+        case GameType.WordsMatching: {
+          return [{
+            type: GameActions.GET_GAME_ROUND_WORD_MATCHING
+          },
+            {
+              type: GameActions.SET_WM_ANSWER_TO_NULL
+            }]
+        }
+        case GameType.OneOfFive: {
+          return [{
+            type: GameActions.GET_GAME_ROUND_ONE_OF_FIVE
+          },
+            {
+              type: GameActions.SET_OOF_ANSWER_TO_NULL
+            }]
+        }
+      }
+    });
 }

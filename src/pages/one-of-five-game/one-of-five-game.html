@@ -13,5 +13,14 @@
 
 
 <ion-content padding>
+  <scoreboard></scoreboard>
+  <ion-grid>
+    <ion-row>
+      What is  <b>{{targetWord?.target}}</b>?
+    </ion-row>
+    <ion-row *ngFor="let word of rootArray">
+      <button ion-button block color="primary" (click)="onRootSelected(word)">{{word.value}}</button>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>

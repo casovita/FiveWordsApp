@@ -2,12 +2,15 @@ import {Component, OnInit} from '@angular/core';
 import {IonicPage} from 'ionic-angular';
 import {Store} from '@ngrx/store';
 
+import 'rxjs/add/operator/mergeMap';
+import {of} from 'rxjs/observable/of';
+
 import * as fromApp from '../../app/store/app.reducers';
 import * as GameActions from '../../app/store/game/game-actions';
-import * as UserActions from '../../app/store/user/user.actions';
 import {GameType} from '../../app/store/game/models/game-type.enum';
 import {Answer} from '../../app/models/answer';
 import {GameButton} from '../../app/models/game-button';
+import * as arrayUtil from '../../app/shared/utils/array-util'
 
 @IonicPage()
 @Component({
@@ -17,96 +20,80 @@ import {GameButton} from '../../app/models/game-button';
 export class WordsMatchingGamePage implements OnInit {
   rootArray: GameButton[] = [];
   targetArray: GameButton[] = [];
-  answersArray: Answer[] = [];
+  private currentRootButton: GameButton;
+  private currentTargetButton: GameButton;
 
   constructor(private store: Store<fromApp.AppState>) {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(new GameActions.SetGameType(GameType.WordsMatching));
-
-    this.store.select(a => a.GameState.GameRound).subscribe((fullArray:Answer[]) => {
+    this.store.select(state => state.GameState.GameRound.WordMatching).subscribe((fullArray: Answer[]) => {
       this.initRound(fullArray);
     });
+
+    /*check answer if both selected*/
+    this.store.select((state) => state.GameState.CurrentAnswer.WordMatching)
+      .switchMap((currentAnswer: Answer) => {
+        if (currentAnswer.root != null && currentAnswer.target != null) {
+          this.store.dispatch(new GameActions.CheckAnswerWordMatching());
+          return of(currentAnswer);
+        }
+        return of(null);
+      }).subscribe();
+
+    // select or hide buttons
+    this.store.select(state => state.GameState.CurrentAnswer.WordMatching.isResolved).subscribe((isResolved: boolean) => {
+      if (isResolved != null && this.currentRootButton != null && this.currentTargetButton != null) {
+        if (isResolved) {
+          this.currentRootButton.isVisible = false;
+          this.currentTargetButton.isVisible = false;
+        } else {
+          this.currentRootButton.isActive = false;
+          this.currentTargetButton.isActive = false;
+        }
+      }
+    })
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad WordsMatchingGamePage');
-    this.store.dispatch(new GameActions.GetGameRoundObj());
-  }
-
-  get IsLaltHande(): boolean {
-    return this.answersArray.filter(a => a.isResolved == false).length == 0;
+  ionViewWillEnter() {
+    console.log('ionViewWillEnter WordsMatchingGamePage');
+    this.store.dispatch(new GameActions.SetGameType(GameType.WordsMatching));
+    // this.store.dispatch(new GameActions.GetGameRoundObj());
   }
 
   onRootSelected(record: GameButton) {
-    const selected = this.targetArray.find(a => a.isActive);
+    this.currentRootButton = record;
+
     record.isActive = true;
+
     this.rootArray.map((word) => {
-      if (word.value != record.value) {
-        word.isActive = false;
-      }
+      word.isActive = word.value == record.value;
     });
-    if (selected) {
-      const answer = this.answersArray.find(a => a.root === record.value);
-      if (answer.root === record.value && answer.target === selected.value) {
-        selected.isVisible = false;
-        record.isVisible = false;
-        answer.isResolved = true;
-        if (this.IsLaltHande) {
-          this.store.dispatch(new GameActions.GetGameRoundObj());
-        }
-        this.updatePoints(2);
-      } else {
-        this.updatePoints(-2);
-      }
-      this.clearHand();
-    }
+    //store
+    this.store.dispatch(new GameActions.SelectWmRoot(record.value));
   }
 
   onTargetSelected(record: GameButton) {
-    const selected = this.rootArray.find(a => a.isActive);
+    this.currentTargetButton = record;
+
     record.isActive = true;
     this.targetArray.map((word) => {
-      if (word.value != record.value) {
-        word.isActive = false;
-      }
+      word.isActive = word.value == record.value;
     });
-    if (selected) {
-      const answer = this.answersArray.find(a => a.target === record.value);
-      if (answer.target === record.value && answer.root === selected.value) {
-        selected.isVisible = false;
-        record.isVisible = false;
-        answer.isResolved = true;
-        console.log(this.answersArray);
-        if (this.IsLaltHande) {
-          this.store.dispatch(new GameActions.GetGameRoundObj());
-        }
-        this.updatePoints(2);
-      } else {
-        this.updatePoints(-2);
-      }
-      this.clearHand();
-    }
-  }
-
-  private updatePoints(points: number) {
-    this.store.dispatch(new UserActions.UpdateUserPoints(points));
-  }
-
-  private clearHand() {
-    this.targetArray.map((a) => a.isActive = false);
-    this.rootArray.map((a) => a.isActive = false);
+    //store
+    this.store.dispatch(new GameActions.SelectWmTarget(record.value));
   }
 
   private initRound(data: Answer[]) {
-    this.rootArray = [];
-    this.targetArray = [];
-    this.answersArray = [];
-    data.map((pair: Answer) => {
-      this.rootArray.push(new GameButton(pair.root, false));
-      this.targetArray.push(new GameButton(pair.target, false));
-      this.answersArray.push(new Answer(pair.root, pair.target, false));
-    });
+    if (data) {
+      this.rootArray = [];
+      this.targetArray = [];
+      data.map((pair: Answer) => {
+        this.rootArray.push(new GameButton(pair.root, false));
+        this.targetArray.push(new GameButton(pair.target, false));
+      });
+      this.rootArray = arrayUtil.shuffle(this.rootArray);
+      this.targetArray = arrayUtil.shuffle(this.targetArray);
+    }
   }
 }

@@ -27,16 +27,27 @@ export class UpdateFailsSequence implements Action {
   }
 }
 
-export const NULLIFY_SEQUENCES = 'NULLIFY_SEQUENCES';
+export const UPDATE_FAILS_COUNT = 'UPDATE_FAILS_COUNT';
 
-export class NullifySequences implements Action {
-  readonly type = NULLIFY_SEQUENCES;
+export class UpdateFailsCount implements Action {
+  readonly type = UPDATE_FAILS_COUNT;
+
+  constructor(public payload: number) {
+  }
 }
 
+export const UPDATE_CORRECT_COUNT = 'UPDATE_CORRECT_COUNT';
+
+export class UpdateCorrectCount implements Action {
+  readonly type = UPDATE_CORRECT_COUNT;
+
+  constructor(public payload: number) {
+  }
+}
 
 export type UserActions =
   UpdateUserPoints |
   UpdateCorrectSequence |
   UpdateFailsSequence |
-  NullifySequences
-  ;
+  UpdateFailsCount |
+  UpdateCorrectCount;

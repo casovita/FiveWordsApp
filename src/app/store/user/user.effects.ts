@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
 import * as fromApp from '../app.reducers';
-import {Action, Store} from '@ngrx/store';
+import {Store} from '@ngrx/store';
 import {Actions, Effect} from '@ngrx/effects';
 import * as UserActions from '../user/user.actions';
-import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class UserEffects {
@@ -11,16 +10,20 @@ export class UserEffects {
   }
 
   @Effect()
-  updatePoints$: Observable<Action> = this.actions$.ofType(UserActions.UPDATE_USER_POINTS)
-    .map((action: UserActions.UpdateUserPoints) => {
+  updatePoints$ = this.actions$.ofType(UserActions.UPDATE_USER_POINTS)
+    .switchMap((action: UserActions.UpdateUserPoints) => {
       if (action.payload > 0) {
-        return {
+        return [{
           type: UserActions.UPDATE_CORRECT_SEQUENCE
-        }
+        }, {
+          type: UserActions.UPDATE_CORRECT_COUNT
+        }]
       } else {
-        return {
+        return [{
           type: UserActions.UPDATE_FAILS_SEQUENCE
-        }
+        }, {
+          type: UserActions.UPDATE_FAILS_COUNT
+        }]
       }
     });
 }

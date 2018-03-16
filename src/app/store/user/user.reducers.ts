@@ -5,18 +5,22 @@ export interface State {
   Points: number;
   CorrectSequence: number;
   FailsSequence: number;
+  CorrectCount: number;
+  FailsCount: number;
 }
 
 const initialState: State = {
   Points: 0,
   CorrectSequence: 0,
   FailsSequence: 0,
+  CorrectCount: 0,
+  FailsCount: 0,
 };
 
 
 export function userReducer(state: State = initialState, action: UserActions.UserActions) {
   switch (action.type) {
-    case      UserActions.UPDATE_USER_POINTS:
+    case UserActions.UPDATE_USER_POINTS:
       const updatedPoints = state.Points + action.payload;
       return {
         ...state,
@@ -55,7 +59,16 @@ export function userReducer(state: State = initialState, action: UserActions.Use
         CorrectSequence: 0,
         FailsSequence: state.FailsSequence + 1
       };
-
+    case UserActions.UPDATE_CORRECT_COUNT:
+      return {
+        ...state,
+        CorrectCount: state.CorrectCount + 1
+      };
+    case UserActions.UPDATE_FAILS_COUNT:
+      return {
+        ...state,
+        FailsCount: state.FailsCount + 1
+      };
     default:
       return state
   }

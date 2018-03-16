@@ -42,7 +42,7 @@ export const initialState: State = {
   CurrentAnswer: {
     WordMatching: new Answer(null, null, null),
     OneOfFive: new Answer(null, null, null),
-  }
+  },
 };
 
 export function gameReducer(state: State = initialState, action: GameActions.GameActions) {

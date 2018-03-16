@@ -22,6 +22,7 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {GameService} from './services/game.service';
 import {CapitalizePipe} from './pipes/capitalize.pipe';
 import {ComponentsModule} from '../components/components.module';
+import {UserEffects} from './store/user/user.effects';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,7 @@ import {ComponentsModule} from '../components/components.module';
     ComponentsModule,
     IonicModule.forRoot(MyApp),
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([GameEffects]),
+    EffectsModule.forRoot([GameEffects, UserEffects]),
     StoreDevtoolsModule.instrument()
   ],
   bootstrap: [IonicApp],

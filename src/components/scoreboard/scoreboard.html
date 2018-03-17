@@ -3,8 +3,8 @@
     Topic - {{topic}}
 
   </div>
-  <div>
-    Points  {{points$ | async}}
+  <div [@points]="pointsState">
+    Points {{currentPoints$ | async}}
 
   </div>
 </div>

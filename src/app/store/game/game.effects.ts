@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {Actions, Effect} from '@ngrx/effects';
-import {Action, Store} from '@ngrx/store';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Actions, Effect } from '@ngrx/effects';
+import { Action, Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/withLatestFrom';
@@ -9,17 +9,20 @@ import 'rxjs/add/operator/withLatestFrom';
 import * as GameActions from './game-actions';
 import * as UserActions from '../user/user.actions';
 import * as fromApp from '../app.reducers'
-import {GameService} from '../../services/game.service';
-import {Language} from './models/language.enum';
-import {Answer} from '../../models/answer';
-import {IGameSettings} from './game-reducers';
-import {GameType} from './models/game-type.enum';
+import { GameService } from '../../services/game.service';
+import { Language } from './models/language.enum';
+import { Answer } from '../../models/answer';
+import { IGameSettings } from './game-reducers';
+import { GameType } from './models/game-type.enum';
+import { ScoreboardAnimationsService } from '../../services/scoreboard-animations.service';
 
 @Injectable()
 export class GameEffects {
   private currentState;
 
-  constructor(private actions$: Actions, private store: Store<fromApp.AppState>, private gameService: GameService) {
+  constructor(private actions$: Actions,
+    private store: Store<fromApp.AppState>,
+    private gameService: GameService) {
   }
 
   @Effect()
@@ -129,17 +132,17 @@ export class GameEffects {
           return [{
             type: GameActions.GET_GAME_ROUND_WORD_MATCHING
           },
-            {
-              type: GameActions.SET_WM_ANSWER_TO_NULL
-            }]
+          {
+            type: GameActions.SET_WM_ANSWER_TO_NULL
+          }]
         }
         case GameType.OneOfFive: {
           return [{
             type: GameActions.GET_GAME_ROUND_ONE_OF_FIVE
           },
-            {
-              type: GameActions.SET_OOF_ANSWER_TO_NULL
-            }]
+          {
+            type: GameActions.SET_OOF_ANSWER_TO_NULL
+          }]
         }
       }
     });

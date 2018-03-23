@@ -12,13 +12,16 @@ import { state, style, trigger, transition, animate } from '@angular/animations'
   animations: [
     trigger('points', [
       state('normal', style({
-        'background-color': 'white'
+        'background-color': 'white',
+        transform: 'scale(1.1)'
       })),
       state('positive', style({
-        'background-color': 'green'
+        'background-color': 'green',
+        transform: 'scale(1.1)'
       })),
       state('negative', style({
-        'background-color': 'red'
+        'background-color': 'red',
+        transform: 'scale(1.1)'
       })),
       transition('normal <=> positive', animate(300)),
       transition('normal <=> negative', animate(300))

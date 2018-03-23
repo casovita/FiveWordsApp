@@ -20,19 +20,19 @@
       <ion-col col-6>
         <ion-row style="min-height: 50px" *ngFor="let record of rootArray">
         <button block
-                [color]="record.isActive == true ? 'dark': 'primary'"
-                [hidden]="record.isVisible == false"
-
-                (click)="onRootSelected(record)" ion-button>{{record.value}}</button>
+                [color]="record.isActive ? 'dark': 'primary'"
+                [@buttonSelction]="record.isActive ? 'selected': 'null'"
+                [@buttonVisibility]="record.isVisible ? 'show': 'hide'"
+                (click)="onRootSelected(record)" ion-button>{{record.value | lowercase}}</button>
         </ion-row>
       </ion-col>
 
       <ion-col col-6>
         <ion-row style="min-height: 50px" *ngFor="let record of targetArray">
-          <button block [color]="record.isActive == true ? 'dark': 'primary'"
-                  [hidden]="record.isVisible == false"
-
-                  (click)="onTargetSelected(record)" ion-button>{{record.value}}</button>
+          <button block [color]="record.isActive ? 'dark': 'primary'"
+               [@buttonSelction]="record.isActive ? 'selected': 'null'"
+               [@buttonVisibility]="record.isVisible ? 'show': 'hide'"
+                  (click)="onTargetSelected(record)" ion-button>{{record.value | lowercase}}</button>
         </ion-row>
 
       </ion-col>

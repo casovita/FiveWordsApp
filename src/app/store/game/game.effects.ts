@@ -14,7 +14,6 @@ import { Language } from './models/language.enum';
 import { Answer } from '../../models/answer';
 import { IGameSettings } from './game-reducers';
 import { GameType } from './models/game-type.enum';
-import { ScoreboardAnimationsService } from '../../services/scoreboard-animations.service';
 
 @Injectable()
 export class GameEffects {

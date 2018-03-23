@@ -1,21 +1,41 @@
-import {Component, OnInit} from '@angular/core';
-import {IonicPage} from 'ionic-angular';
-import {Store} from '@ngrx/store';
+import { Component, OnInit } from '@angular/core';
+import { IonicPage } from 'ionic-angular';
+import { Store } from '@ngrx/store';
 
 import 'rxjs/add/operator/mergeMap';
-import {of} from 'rxjs/observable/of';
+import { of } from 'rxjs/observable/of';
 
 import * as fromApp from '../../app/store/app.reducers';
 import * as GameActions from '../../app/store/game/game-actions';
-import {GameType} from '../../app/store/game/models/game-type.enum';
-import {Answer} from '../../app/models/answer';
-import {GameButton} from '../../app/models/game-button';
+import { GameType } from '../../app/store/game/models/game-type.enum';
+import { Answer } from '../../app/models/answer';
+import { GameButton } from '../../app/models/game-button';
 import * as arrayUtil from '../../app/shared/utils/array-util'
+import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
 
 @IonicPage()
 @Component({
   selector: 'page-words-matching-game',
   templateUrl: 'words-matching-game.html',
+  animations: [
+    trigger('buttonVisibility', [
+      state('show', style({ 'display': 'block', })),
+      state('hide', style({ 'display': 'none' })),
+      transition('* => *', animate('.1s'))
+    ]),
+    trigger('buttonSelction',[
+      state('selected',style({
+        transform: 'translate3d(0,0,0)'
+      })),
+      transition('* => selected', [
+        animate('300ms ease-in', keyframes([
+          style({transform: 'translate3d(0,0,0)', offset: 0}),
+          style({transform: 'translate3d(0,-10px,0)', offset: 0.5}),
+          style({transform: 'translate3d(0,0,0)', offset: 1})
+        ]))
+      ])
+    ])
+  ],
 })
 export class WordsMatchingGamePage implements OnInit {
   rootArray: GameButton[] = [];

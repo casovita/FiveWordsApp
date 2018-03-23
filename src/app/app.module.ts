@@ -23,7 +23,6 @@ import { GameService } from './services/game.service';
 import { CapitalizePipe } from './pipes/capitalize.pipe';
 import { ComponentsModule } from '../components/components.module';
 import { UserEffects } from './store/user/user.effects';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({

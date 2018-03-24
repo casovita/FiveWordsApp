@@ -9,12 +9,27 @@ import {Answer} from '../../app/models/answer';
 import {GameButton} from '../../app/models/game-button';
 import * as arrayUtil from '../../app/shared/utils/array-util'
 import {of} from 'rxjs/observable/of';
+import { trigger, state, transition, animate, style, keyframes } from '@angular/animations';
 
 
 @IonicPage()
 @Component({
   selector: 'page-one-of-five-game',
   templateUrl: 'one-of-five-game.html',
+  animations:[
+    trigger('buttonSelction',[
+      state('selected',style({
+        transform: 'translate3d(0,0,0)'
+      })),
+      transition('* => selected', [
+        animate('300ms ease-in', keyframes([
+          style({transform: 'translate3d(0,0,0)', offset: 0}),
+          style({transform: 'translate3d(0,-10px,0)', offset: 0.5}),
+          style({transform: 'translate3d(0,0,0)', offset: 1})
+        ]))
+      ])
+    ])
+  ]
 })
 export class OneOfFiveGamePage implements OnInit {
   public targetWord: Answer;
